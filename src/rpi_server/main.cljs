@@ -1,9 +1,8 @@
-(ns rpi-server.core
-  (:require ))
+(ns rpi-server.main)
 
 (enable-console-print!)
 
-(println "This text is printed from src/rpi-server/core.cljs. Go ahead and edit it and see reloading in action.")
+(println "This text is printed from src/rpi-server/main.cljs. Go ahead and edit it and see reloading in action.")
 
 ;; define your app data so that it doesn't get over-written on reload
 

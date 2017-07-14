@@ -19,8 +19,8 @@
   :cljsbuild {:builds
               [{:id "dev"
                 :source-paths ["src"]
-                :figwheel {:on-jsload "rpi-server.core/on-js-reload"}
-                :compiler {:main rpi-server.core
+                :figwheel {:on-jsload "rpi-server.main/on-js-reload"}
+                :compiler {:main rpi-server.main
                            :optimizations :none
                            :target :nodejs
                            :output-to "app.js"
@@ -29,7 +29,7 @@
                            :source-map-timestamp true}}
                {:id "app"
                 :source-paths ["src"]
-                :compiler {:main rpi-server.core
+                :compiler {:main rpi-server.main
                            :optimizations :none
                            :target :nodejs
                            :output-to "app.js"
