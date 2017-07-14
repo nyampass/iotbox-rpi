@@ -9,7 +9,8 @@
   :dependencies [[org.clojure/clojure "1.9.0-alpha17"]
                  [org.clojure/clojurescript "1.9.671"]
                  [org.clojure/core.async  "0.3.442"
-                  :exclusions [org.clojure/tools.reader]]]
+                  :exclusions [org.clojure/tools.reader]]
+                 [integrant "0.4.0"]]
 
   :plugins [[lein-figwheel "0.5.10"]
             [lein-cljsbuild "1.1.5" :exclusions [[org.clojure/clojure]]]]
@@ -19,7 +20,7 @@
   :cljsbuild {:builds
               [{:id "dev"
                 :source-paths ["src"]
-                :figwheel {:on-jsload "rpi-server.main/on-js-reload"}
+                :figwheel {:on-jsload "rpi-server.main/reload"}
                 :compiler {:main rpi-server.main
                            :optimizations :none
                            :target :nodejs

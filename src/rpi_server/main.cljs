@@ -1,15 +1,30 @@
-(ns rpi-server.main)
+(ns rpi-server.main
+  (:require [integrant.core :as ig]))
 
 (enable-console-print!)
 
-(println "This text is printed from src/rpi-server/main.cljs. Go ahead and edit it and see reloading in action.")
+(defmethod ig/init-key :app [_ _]
+  (println "hi"))
 
-;; define your app data so that it doesn't get over-written on reload
+(def configs
+  {:app nil})
 
-(defonce app-state (atom {:text "Hello world!"}))
+(defonce system (atom nil))
 
-(defn on-js-reload []
-  ;; optionally touch your app-state to force rerendering depending on
-  ;; your application
-  ;; (swap! app-state update-in [:__figwheel_counter] inc)
-)
+(defn start []
+  (when-not @system
+    (reset! system (ig/init configs))))
+
+(defn stop []
+  (when @system
+    (ig/halt! @system)
+    (reset! system nil)))
+
+(defn main []
+  (start))
+
+(defn reload []
+  (stop)
+  (start))
+
+(set! *main-cli-fn* main)
