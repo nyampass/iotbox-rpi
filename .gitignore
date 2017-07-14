@@ -12,3 +12,4 @@ pom.xml
 .repl
 .nrepl-port
 app.js
+/node_modules/

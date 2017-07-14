@@ -1,0 +1,20 @@
+{
+  "name": "rpi-server",
+  "version": "1.0.0",
+  "description": "FIXME: Write a one-line description of your library/project.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/nyampass/rpi-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/nyampass/rpi-server#readme",
+  "dependencies": {
+    "ws": "^3.0.0"
+  }
+}
