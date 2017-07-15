@@ -1,13 +1,13 @@
 (ns rpi-server.main
-  (:require [integrant.core :as ig]))
+  (:require [integrant.core :as ig]
+            [rpi-server.websocket :as websocket]
+            [rpi-server.handler :as handler]))
 
 (enable-console-print!)
 
-(defmethod ig/init-key :app [_ _]
-  (println "hi"))
-
 (def configs
-  {:app nil})
+  {::handler/handler {}
+   ::websocket/server {:port 3000 :handler (ig/ref ::handler/handler)}})
 
 (defonce system (atom nil))
 
