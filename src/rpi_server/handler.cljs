@@ -3,18 +3,31 @@
   (:require [integrant.core :as ig]
             [cljs.nodejs :as nodejs]
             [clojure.walk :refer [keywordize-keys]]
-            [cljs.core.async :refer [chan <! put!]]))
+            [cljs.core.async :refer [chan <! put!]]
+            [rpi-server.process :as process]))
 
 (defonce fs (js/require "fs"))
 
 (def MESSAGE_ALLOC_SIZE 2)
 
-(defonce process (atom nil))
+(defonce latest-process (atom nil))
+
+(defn start-process [callback]
+  (prn :start-process latest-process)
+  (if-let [process @latest-process]
+    (do
+      (prn process :kill)
+      (.kill process))
+    )
+  (let [process (process/start "node" :args ["work/index.js"]
+                               :callback callback)]
+    (prn :process process)
+    (reset! latest-process process)))
 
 (def WORK_DIR "./work/")
 
 (defn- parse-message [buffer]
-  (let [message-size (.readInt16BE buffer 0)
+  (let [message-size (.readUInt16BE buffer 0)
         message (.toString buffer "utf8" MESSAGE_ALLOC_SIZE
                            (+ MESSAGE_ALLOC_SIZE message-size))
         has-file? (> (.-length buffer)
@@ -31,12 +44,20 @@
                                                     (put! ch {:err err})
                                                     (put! ch {:message "success"})))))
 
-(defn- run-command [{:keys [cmd args]} file-buffer]
+(defn- run-command [ws {:keys [cmd args]} file-buffer]
   (let [ch (chan)]
     (prn cmd args file-buffer)
-    (condp = cmd
-      "put"
+    (condp = (keyword cmd)
+      :put
       (run-save ch (:filename args) file-buffer)
+      :run
+      (do
+        (start-process (fn [type message]
+                                   (if (= (.-readyState ws)
+                                          (.-OPEN ws))
+                                     (.send ws
+                                            (str :log type message)))))
+        (put! ch {:message "success"}))
       (throw (js/Error. "unknown command " cmd)))
     ch))
 
@@ -44,7 +65,7 @@
   (fn [message]
     (js/console.log "message received:" message)
     (go (let [[command file] (parse-message message)
-              result (<! (run-command command file))]
+              result (<! (run-command ws command file))]
           (.send ws (str  "result: " result))))))
 
 (defmethod ig/init-key ::handler [_ _]
@@ -60,7 +81,7 @@
 
 (defn size-buffer [size]
   (let [size-buff (js/Buffer.allocUnsafe 2)]
-    (.writeInt16BE size-buff size 0)
+    (.writeUInt16BE size-buff size 0)
     size-buff))
 
 (defn message-buffer [command & {:keys [args filename]}]

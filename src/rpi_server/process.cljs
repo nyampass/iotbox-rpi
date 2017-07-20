@@ -15,7 +15,7 @@
         (.on process "exit"
              #(callback :exit %))
         (.on process "error"
-             (prn "error")))
+             #(callback :err  %)))
       process)
     (catch :default e
         (callback :err e)
