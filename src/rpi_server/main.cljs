@@ -8,9 +8,10 @@
 (def configs
   {::handler/handler {}
    ::websocket/server {:port 3030 :handler (ig/ref ::handler/handler)}
-   ::handler/client-handler {}
-   ::websocket/client {:url "ws://localhost:3000/ws"
-                       :handler (ig/ref ::handler/client-handler)}})
+   ;; ::handler/client-handler {}
+   ;; ::websocket/client {:url "ws://192.168.11.22:3000/ws"
+   ;;   :handler (ig/ref ::handler/client-handler)}
+   })
 
 (defonce system (atom nil))
 

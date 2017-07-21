@@ -4,18 +4,22 @@
 
 (def spawn (.-spawn (nodejs/require "child_process")))
 
-(defn start [cmd & {:keys [args callback]}]
+(defn start [cmd & {:keys [args callback dir]}]
+  (prn cmd args callback dir)
   (try
-    (let [process (spawn cmd (clj->js args))]
+    (let [process (spawn
+                   cmd
+                   (clj->js args)
+                   #js{"cwd" dir})]
       (when callback
         (.stdout.on process "data"
-                    #(callback :stdout %))
+                    #(callback :stdout (str %)))
         (.stderr.on process "data"
-                    #(callback :stderr %))
+                    #(callback :error (str  %)))
         (.on process "exit"
-             #(callback :exit %))
+             #(callback :message (str "Exit: " %)))
         (.on process "error"
-             #(callback :err  %)))
+             #(callback :error (str %))))
       process)
     (catch :default e
         (callback :err e)

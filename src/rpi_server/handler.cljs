@@ -10,21 +10,23 @@
 
 (def MESSAGE_ALLOC_SIZE 2)
 
+(def WORK_DIR "./work/")
+
 (defonce latest-process (atom nil))
 
-(defn start-process [callback]
+(defn start-process [dir callback]
   (prn :start-process latest-process)
   (if-let [process @latest-process]
     (do
       (prn process :kill)
       (.kill process))
     )
-  (let [process (process/start "node" :args ["work/index.js"]
+  (let [process (process/start "npm"
+                               :args ["run" "start"]
+                               :dir WORK_DIR
                                :callback callback)]
     (prn :process process)
     (reset! latest-process process)))
-
-(def WORK_DIR "./work/")
 
 (defn- parse-message [buffer]
   (let [message-size (.readUInt16BE buffer 0)
@@ -38,11 +40,19 @@
      (when has-file?
        (.slice buffer (+ message-size MESSAGE_ALLOC_SIZE)))]))
 
+(defn- send [ws type log]
+  (if (= (.-readyState ws)
+         (.-OPEN ws))
+    (.send ws
+           (.stringify js/JSON
+                       #js{:type (-> type keyword name)
+                           :text log}))))
+
 (defn- run-save [ch filename buffer]
   (.writeFile fs (str WORK_DIR filename) buffer (fn [err]
                                                   (if err
-                                                    (put! ch {:err err})
-                                                    (put! ch {:message "success"})))))
+                                                    (put! ch [:error (str err)])
+                                                    (put! ch [:message (str  "Save " filename)])))))
 
 (defn- run-command [ws {:keys [cmd args]} file-buffer]
   (let [ch (chan)]
@@ -52,21 +62,19 @@
       (run-save ch (:filename args) file-buffer)
       :run
       (do
-        (start-process (fn [type message]
-                                   (if (= (.-readyState ws)
-                                          (.-OPEN ws))
-                                     (.send ws
-                                            (str :log type message)))))
-        (put! ch {:message "success"}))
-      (throw (js/Error. "unknown command " cmd)))
+        (start-process
+         WORK_DIR
+         #(send ws %1 %2))
+        (put! ch [:message (str "Start " cmd "!")]))
+      (throw (js/Error. "Unknown command " cmd)))
     ch))
 
 (defn make-handler [ws]
   (fn [message]
     (js/console.log "message received:" message)
     (go (let [[command file] (parse-message message)
-              result (<! (run-command ws command file))]
-          (.send ws (str  "result: " result))))))
+              [type log] (<! (run-command ws command file))]
+          (send ws type log)))))
 
 (defmethod ig/init-key ::handler [_ _]
   make-handler)
@@ -74,7 +82,7 @@
 (defn make-client-handler [ws]
   (fn [message]
     (js/console.log "[client] message received:" message)
-    (.send ws message)))
+    (send ws "info" message)))
 
 (defmethod ig/init-key ::client-handler [_ _]
   make-client-handler)
@@ -93,6 +101,3 @@
                             message
                             (fs.readFileSync filename)])
       (js/Buffer.concat #js[(size-buffer (.-length message)) message]))))
-
-(def sample-with-file (message-buffer "hoge" :args {} :filename "./examples/sample.js"))
-(def sample (message-buffer "hoge" :args {}))
