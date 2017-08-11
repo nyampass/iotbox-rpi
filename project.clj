@@ -24,7 +24,7 @@
                 :compiler {:main rpi-server.main
                            :optimizations :none
                            :target :nodejs
-                           :output-to "app.js"
+                           :output-to "app-dev.js"
                            :output-dir "target/dev/out"
                            :source-map true
                            :source-map-timestamp true}}
@@ -33,11 +33,13 @@
                 :compiler {:main rpi-server.main
                            :optimizations :none
                            :target :nodejs
-                           :output-to "app.js"
-                           :output-dir "target/app/out"}}]}
+                           :output-dir "target/app/out"
+                           :output-to "app.js"}}]}
 
   :profiles {:dev {:dependencies [[figwheel-sidecar "0.5.10"]
                                   [com.cemerick/piggieback "0.2.1"]]
                    :source-paths ["src" "dev"]
                    :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
-                   :clean-targets ^{:protect false} ["app.js" "dev.js" :target-path]}})
+                   :clean-targets ^{:protect false} ["app.js" "app-dev.js" :target-path]}}
+
+  :aliases {"build" ["do" "clean" ["cljsbuild" "once" "app"]]})

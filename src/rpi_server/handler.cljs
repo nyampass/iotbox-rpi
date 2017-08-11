@@ -21,8 +21,8 @@
       (prn process :kill)
       (.kill process))
     )
-  (let [process (process/start "npm"
-                               :args ["run" "start"]
+  (let [process (process/start "node"
+                               :args ["index.js"]
                                :dir WORK_DIR
                                :callback callback)]
     (prn :process process)
@@ -66,6 +66,13 @@
          WORK_DIR
          #(send ws %1 %2))
         (put! ch [:message (str "Start " cmd "!")]))
+      :npm-update
+      (do
+        (process/start "npm"
+                       :args ["update"]
+                       :dir WORK_DIR
+                       :callback #(send ws %1 %2))
+        (put! ch [:message "Start npm update"]))
       (throw (js/Error. "Unknown command " cmd)))
     ch))
 
