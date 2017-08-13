@@ -31,7 +31,7 @@
                {:id "app"
                 :source-paths ["src"]
                 :compiler {:main rpi-server.main
-                           :optimizations :none
+                           :optimizations :simple
                            :target :nodejs
                            :output-dir "target/app/out"
                            :output-to "app.js"}}]}
