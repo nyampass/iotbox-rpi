@@ -1,6 +1,6 @@
 {
   "name": "iotbox-rpi",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "FIXME: Write a one-line description of your library/project.",
   "main": "app.js",
   "scripts": {
