@@ -1,6 +1,6 @@
 (defproject rpi-server "0.1.0-SNAPSHOT"
-  :description "FIXME: write this!"
-  :url "http://example.com/FIXME"
+  :description "IotBox(Interactive developement tool) for Raspberry Pi"
+  :url "https://github.com/nyampass/iotbox-rpi-server/"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 

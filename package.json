@@ -1,5 +1,5 @@
 {
-  "name": "rpi-server",
+  "name": "iotbox-rpi",
   "version": "1.0.0",
   "description": "FIXME: Write a one-line description of your library/project.",
   "main": "app.js",
