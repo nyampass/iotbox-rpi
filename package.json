@@ -1,6 +1,6 @@
 {
   "name": "iotbox-rpi",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "FIXME: Write a one-line description of your library/project.",
   "main": "app.js",
   "scripts": {
@@ -17,6 +17,5 @@
   "homepage": "https://github.com/nyampass/iotbox-rpi#readme",
   "dependencies": {
     "ws": "^3.0.0"
-  },
-
+  }
 }
