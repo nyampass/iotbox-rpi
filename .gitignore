@@ -11,5 +11,4 @@ pom.xml
 .lein-plugins/
 .repl
 .nrepl-port
-app.js
 /node_modules/

@@ -9,12 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/nyampass/rpi-server.git"
+    "url": "git@github.com:nyampass/iotbox-rpi.git"
   },
-  "author": "",
+  "bin": {"iotbox": "./cli.js"},
+  "author": "Nyampass Corp.",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/nyampass/rpi-server#readme",
+  "homepage": "https://github.com/nyampass/iotbox-rpi#readme",
   "dependencies": {
     "ws": "^3.0.0"
-  }
+  },
+
 }
