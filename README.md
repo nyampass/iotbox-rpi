@@ -1,10 +1,8 @@
-# rpi-server
+# IotBox RPi
 
-FIXME: Write a one-line description of your library/project.
+Deploying tool javascript code to Raspberry Pi
 
-## Overview
-
-FIXME: Write a paragraph about the library/project and highlight its goals.
+IotBox: https://github.com/nyampass/iotbox-atom-package
 
 ## Setup
 

@@ -1,7 +1,7 @@
 {
   "name": "iotbox-rpi",
   "version": "1.0.3",
-  "description": "FIXME: Write a one-line description of your library/project.",
+  "description": "Deploying tool javascript code to Raspberry Pi",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
