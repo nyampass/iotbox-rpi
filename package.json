@@ -1,6 +1,6 @@
 {
   "name": "iotbox-rpi",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Deploying tool javascript code to Raspberry Pi",
   "main": "app.js",
   "scripts": {
