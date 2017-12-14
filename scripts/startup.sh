@@ -35,4 +35,4 @@ else
     led_on
 fi
 
-sudo -u pi "nohup iotbox-rpi"
+sudo -u pi "nohup iotbox"
