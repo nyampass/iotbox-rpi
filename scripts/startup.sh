@@ -35,4 +35,4 @@ else
     led_on
 fi
 
-sudo -u pi "nohup iotbox"
+sudo -u pi sh -c "cd /home/pi && mkdir -p work && nohup /usr/local/bin/iotbox &"
