@@ -21,8 +21,8 @@
       (prn process :kill)
       (.kill process))
     )
-  (let [process (process/start "node"
-                               :args ["index.js"]
+  (let [process (process/start "sudo"
+                               :args ["node" "index.js"]
                                :dir WORK_DIR
                                :callback callback)]
     (prn :process process)
